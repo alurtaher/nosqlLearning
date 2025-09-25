@@ -7,7 +7,8 @@ class Product  {
         this.description = description,
         this.imageUrl = imageUrl
     }
-    async save() {
+
+    static async save() {
         try {
             const db = getDb();
             let result = await db.collection('products').insertOne(this);
@@ -17,6 +18,7 @@ class Product  {
             console.log(error)
         }
     }
+
 }
 
 module.exports = Product;

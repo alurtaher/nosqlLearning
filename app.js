@@ -5,7 +5,7 @@ let { mongoConnect, getDb } = require("./database/db.js");
 const { MongoClient, ObjectId } = require('mongodb');
 let PORT = process.env.PORT;
 let Product = require("./models/product.js");
-
+let User = require('./models/user.js');
 app.use(express.json());
 
 app.post("/add-product", async (req, res) => {
@@ -68,6 +68,24 @@ app.delete('/delete-product/:id',async(req,res)=>{
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to delete product" })
+    }
+})
+
+app.post('/register',async(req,res)=>{
+    let{name,email,password} = req.body;
+    let p1 = new User(name,email,password);
+    let result = await p1.save();
+    res.status(200).json({ result });
+})
+
+app.post('/find-user',async(req,res)=>{
+    try {
+        let {userId} = req.body;
+        const foundUser = await User.findUserById(userId);
+        res.status(200).json({ foundUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to find the user" })
     }
 })
 
